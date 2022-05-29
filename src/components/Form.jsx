@@ -1,13 +1,15 @@
- import React , {useState, useEffect} from 'react';
+ import React , {useState} from 'react';
  
 const Form = () => {
     const [form, setForm] = useState({
        //key: value 
-        username: "",
-        email: "",
-        password: "",
-        age: "",
+        // username: "",
+        // email: "",
+        // password: "",
+        // age: "",
+        // isIndian: false,
     }); 
+    
 
 
     // total has 3 steps here
@@ -16,28 +18,48 @@ const Form = () => {
     //3.updating form where key = unique id and value = new value
     const handleOnChange = (e) => {
         //let{key, value} = e.target
-        let { name, value } = e.target;
-       // console.log(e)
-        setForm({
+        let { type, name, value, checked , files} = e.target;
+       // console.log(type, name, value, checked)
+        //console.log(e)
+        if (type === "checkbox") {
+              setForm({
+            ...form,// destructering and spred operator.
+            [name]: checked,
+              });     
+        } else if (type === "file") {
+            setForm({
+                ...form,
+                [name]: files,
+           })
+        }
+        else {
+              setForm({
             ...form,// destructering and spred operator.
             [name]: value,
         });
+}
+ 
     };
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     console.log(form);
+    // }, [form]);
+
+    const handleOnSubmit = (e) => {
+        e.preventDefault();
         console.log(form);
-    }, [form]);
+    };
 
    return (
      <div>
            Form 
-           <form>
+           <form onSubmit={handleOnSubmit}>
                <div>
                    <label>Name:</label>
                    <input type="text"
                        name='username'//key
                        placeholder='Enter Name'
-                       value={form.name}
+                       value={form.username}
                        onChange={handleOnChange}
                    />
                </div>
@@ -58,6 +80,8 @@ const Form = () => {
                        placeholder='Enter Password'
                   onChange={handleOnChange} />
                </div>
+
+               
                 <div>
                    <label>Age</label>
                    <input type="number"
@@ -66,7 +90,54 @@ const Form = () => {
                        onChange={handleOnChange}
                    />
                </div>
+
+                <div>
+                   <label>City:</label>
+                   <select name="city"
+                       value={form.city}
+                       onChange= {handleOnChange}
+                   >
+                       <option value="Delhi">Delhi</option>
+                       <option value="Bangalure">Bangalue</option>
+                       <option value="Pune">Pune</option>
+                       <option value="Noida">Noida</option>
+                   </select>
+              </div>
+
+
+                <div>
+                   <input type="checkbox"
+                       name="isIndian"
+                       checked={form.isIndian}
+                       onChange={handleOnChange}
+                   />
+                   <label>Is Indian:</label>
+               </div>
+               <div>
+                   <input type="radio"
+                       name="gender"
+                       value= "Male"
+                       onChange={handleOnChange}
+                   />
+                   <label >Male</label>
+                   
+                   <input type="radio"
+                       name="gender"
+                       value="Female"
+                       onChange={handleOnChange}
+                   />
+                   <label >Female</label>
+               </div>
+                <div>
+                   <label>User Resume:</label>
+                   <input type="file"
+                       name='resume'
+                       files={form.resume}
+                  onChange={handleOnChange} />
+               </div>
+               <button type='submit'>Submit</button>
            </form>
+
      </div>
    );
  }
